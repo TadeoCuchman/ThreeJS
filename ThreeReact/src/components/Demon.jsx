@@ -12,7 +12,7 @@ import { useGLTF } from '@react-three/drei'
 export default function Model(props) {
   const { nodes, materials } = useGLTF('/demon.gltf')
   return (
-    <group scale={0.1} {...props} dispose={null}>
+    <group scale={0.1} {...props}  dispose={null}>
           <primitive object={nodes.GLTF_created_0_rootJoint} />
           <skinnedMesh geometry={nodes.Object_7.geometry} material={materials.Skin_1} skeleton={nodes.Object_7.skeleton} />
     </group>
