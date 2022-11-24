@@ -1,6 +1,13 @@
 import React from "react";
 
-export const Controls = ({ box, boxes, setBox, setBoxes}) => {
+export const ControlsBox = ({
+  box,
+  boxes,
+  setBox,
+  setBoxes,
+  setActivate,
+  activate,
+}) => {
   return (
     <div id="controlNewBoxes">
       <span>New Box:</span>
@@ -55,6 +62,13 @@ export const Controls = ({ box, boxes, setBox, setBoxes}) => {
         }}
       >
         addBox
+      </button>
+      <button
+        onClick={() => {
+          activate ? setActivate(false) : setActivate(true);
+        }}
+      >
+        {activate ? "Desactivate" : "Activate"}
       </button>
     </div>
   );

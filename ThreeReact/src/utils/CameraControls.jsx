@@ -1,5 +1,8 @@
 import React, {useRef} from 'react'
-import { useThree, useFrame } from '@react-three/fiber'
+import { useThree, useFrame, extend } from '@react-three/fiber'
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+
+extend({ OrbitControls });
 
 export const CameraControls = () => {
   // Get a reference to the Three.js Camera, and the canvas html element.
@@ -25,6 +28,7 @@ export const CameraControls = () => {
       minAzimuthAngle={Infinity}
       maxDistance={200}
       minDistance={2}
+      
     />
   );
 };

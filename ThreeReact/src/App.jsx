@@ -1,34 +1,26 @@
 import React from "react";
 import { useState, useEffect, useRef, Suspense } from "react";
-import {
-  Canvas,
-  useLoader,
-  extend,
-} from "@react-three/fiber";
-import {  Stars } from "@react-three/drei";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import {
-  Physics,
-  useBox,
-  usePlane,
-  useSphere,
-} from "@react-three/cannon";
+import { Canvas, useLoader } from "@react-three/fiber";
+import { Stars, OrthographicCamera } from "@react-three/drei";
+import { Physics, useBox, usePlane, useSphere } from "@react-three/cannon";
 import { TextureLoader } from "three/src/loaders/TextureLoader";
 
-import { Controls } from './utils/Controls'
-import { CameraControls } from './utils/CameraControls'
-import Demon from './components/Demon';
+import { ControlsBox } from "./utils/ControlsBox";
+import { CameraControls } from "./utils/CameraControls";
+import Demon from "./components/Demon";
 import "./App.css";
-extend({ OrbitControls });
 
-
-
-function Box({ x, y, z }) {
-  const [ref, api] = useBox(() => ({ mass: 1, position: [x, y, z] }));
+function Box({ x, y, z}) {
+  const [color, setColor] = useState("red");
+  const [ref, api] = useBox(() => ({ mass: 1000, position: [x, 0, z] }));
   return (
     <mesh
+      rotation={[Math.PI / 2, 0, 0]}
       onClick={() => {
-        api.velocity.set(0, 10, 0);
+        // api.velocity.set(0, 10, 0);
+
+        setColor("green");
+        e.stopPropagation();
       }}
       ref={ref}
       position={[x, y, z]}
@@ -36,7 +28,7 @@ function Box({ x, y, z }) {
       <boxBufferGeometry attach="geometry" args={[1, 1, 1]}></boxBufferGeometry>
       <meshLambertMaterial
         attach="material"
-        color="red"
+        color={color}
       ></meshLambertMaterial>
     </mesh>
   );
@@ -59,7 +51,7 @@ function Sphere({ x, y, z }) {
   );
 }
 
-function Plane({setBox, setBoxes, box, boxes }) {
+function Plane({ setBox, activate }) {
   const [ref] = usePlane(() => ({
     rotation: [-Math.PI / 2, 0, 0],
   }));
@@ -68,9 +60,13 @@ function Plane({setBox, setBoxes, box, boxes }) {
     <mesh
       rotation={[-Math.PI / 2, 0, 0]}
       onClick={(e) => {
-        setBox({ x: e.point.x, y: e.point.y, z: e.point.z });
-        setBoxes([...boxes, box]);
-
+        activate ?
+          setBox({
+            x: e.point.x,
+            y: e.point.y,
+            z: e.point.z,
+          })
+          : "";
       }}
       onUpdate={(self) => console.log("props have been updated")}
     >
@@ -86,23 +82,34 @@ function Plane({setBox, setBoxes, box, boxes }) {
   );
 }
 
-
-
-
 function App() {
   const [boxes, setBoxes] = useState([]);
   const [box, setBox] = useState({ x: undefined, y: undefined, z: undefined });
+  const [activate, setActivate] = useState(false)
+  useEffect(() => {
+    setBoxes([...boxes, box]);
+  }, [box]);
   return (
     <>
       <h1> Welcome to Tadeo's World</h1>
-      <Canvas camera={{ position: [50, 100, 250] }}>
+      <Canvas
+        camera={{ position: [50, 100, 250] }}
+        onPointerUp={(e) => {
+          e.stopPropagation();
+          // setBox({
+          // x: e.x,
+          // y: e.y,
+          // })
+          console.log(e.nativeEvent);
+        }}
+      >
         <CameraControls />
 
         <Physics>
           {boxes.map((box, i) => {
             return <Box key={i} x={box.x} y={box.y} z={box.z} />;
           })}
-          <Plane setBox={setBox} setBoxes={setBoxes} box={box} boxes={boxes}/>
+          <Plane setBox={setBox} activate={activate} />
           <Sphere x={30} y={100} z={1} />
           <Demon position={[10, 0, 10]} />
         </Physics>
@@ -111,7 +118,7 @@ function App() {
         <spotLight position={[0, 150, 111]} angle={Math.PI / 3} />
         <Stars radius={200} />
       </Canvas>
-     <Controls boxes={boxes} setBoxes={setBoxes} box={box} setBox={setBox}/>
+      <ControlsBox boxes={boxes} setBoxes={setBoxes} box={box} setBox={setBox} activate={activate} setActivate={setActivate} />
     </>
   );
 }
