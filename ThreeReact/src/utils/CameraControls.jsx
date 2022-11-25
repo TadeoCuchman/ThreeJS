@@ -22,13 +22,13 @@ export const CameraControls = () => {
       ref={controls}
       args={[camera, domElement]}
       enableZoom={true}
-      maxPolarAngle={Math.PI / 2.01}
+      maxPolarAngle={Math.PI }
       minPolarAngle={Math.PI / 4}
       maxAzimuthAngle={Infinity}
       minAzimuthAngle={Infinity}
       maxDistance={200}
-      minDistance={2}
-      zoomSpeed={0.2}
+      minDistance={10}
+      zoomSpeed={0.15}
       
     />
   );

@@ -56,20 +56,26 @@ export const ControlsBox = ({
           }}
         />
       </span>
+      {activate ? 
       <button
         onClick={() => {
-          setBoxes([...boxes, box]);
+          activate ? setBoxes([...boxes, box]) : "";
         }}
       >
         addBox
       </button>
-      <button
-        onClick={() => {
-          activate ? setActivate(false) : setActivate(true);
-        }}
-      >
-        {activate ? "Desactivate" : "Activate"}
-      </button>
+        : (
+        ""
+      )}
+      
+        <button
+          onClick={() => {
+            activate ? setActivate(false) : setActivate(true);
+          }}
+        >
+          {activate ? "Desactivate" : "Activate"}
+        </button>
+      
     </div>
   );
 };

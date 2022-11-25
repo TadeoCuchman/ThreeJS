@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect, useRef, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import {
   Stars,
@@ -18,7 +18,7 @@ import "./App.css";
 function Box({ x, y, z }) {
   const [color, setColor] = useState("red");
   const [ref, api] = useBox(() => ({
-    mass: 10,
+    mass: 100,
     position: [x, y, z],
     args: [3, 3, 3],
   }));
@@ -46,7 +46,7 @@ function Box({ x, y, z }) {
 function Plane({ setBox, activate }) {
   const [ref] = usePlane(() => ({
     rotation: [0, 0, 0],
-     position:[0, 10, -190]
+    position: [0, 40, -185],
   }));
 
   return (
@@ -57,7 +57,7 @@ function Plane({ setBox, activate }) {
         activate
           ? setBox({
               x: e.point.x,
-              y: -10,
+              y: -1,
               z: e.point.z,
             })
           : "";
@@ -94,6 +94,7 @@ function Flor({ setBox, activate }) {
                 z: e.point.z,
               })
             : "";
+          e.stopPropagation();
         }}
       >
         <planeGeometry args={[400, 400]} />
@@ -116,8 +117,8 @@ function Flor({ setBox, activate }) {
 }
 
 function App() {
-  const [boxes, setBoxes] = useState([]);
-  const [box, setBox] = useState({ x: undefined, y: undefined, z: undefined });
+  const [boxes, setBoxes] = useState([]);0
+  const [box, setBox] = useState({ x: 0, y: 0, z: 0 });
   const [activate, setActivate] = useState(false);
   const [physics, setPhysics] = useState(false);
 
@@ -127,41 +128,43 @@ function App() {
 
   return (
     <>
-      <h1> Welcome to Tadeo's World</h1>
-      <Canvas camera={{ position: [0, 50, 200] }} shadows>
-        <CameraControls />
-        <Physics isPaused={physics}>
-          <Moon x={30} y={100} z={1} />
-          <Float floatIntensity={2.3} rotationIntesity={1.5} speed={1.4}>
-            <Demon position={[0, 20, 0]} />
-          </Float>
-          {boxes.map((box, i) => {
-            return <Box key={i} x={box.x} y={box.y} z={box.z} />;
-          })}
-          <Plane setBox={setBox} activate={activate} />
-          <Flor setBox={setBox} activate={activate} />
-        </Physics>
-        <ambientLight intensity={0.5} />
-        <Stars radius={200} />
-      </Canvas>
-      <div style={{ display: "flex", flexDirection: "row" }}>
-        <ControlsBox
-          boxes={boxes}
-          setBoxes={setBoxes}
-          box={box}
-          setBox={setBox}
-          activate={activate}
-          setActivate={setActivate}
-        />
-        <div id="controlNewBoxes">
-          <span>Pause Physics</span>
-          <input
-            type="checkbox"
-            value={physics}
-            onChange={() => setPhysics(!physics)}
+      <Suspense fallback={<h1>Loafing..</h1>}>
+        <h1> Welcome to Tadeo's World</h1>
+        <Canvas camera={{ fov: 100, position: [0, 50, 200] }} angle={Math.PI / 6} shadows>
+          <CameraControls />
+          <Physics isPaused={physics}>
+            <Moon x={30} y={100} z={1} />
+            <Float floatIntensity={2.3} rotationIntensity={1.5} speed={1.4}>
+              <Demon position={[0, 20, 0]} />
+            </Float>
+            {boxes.map((box, i) => {
+              return <Box key={i} x={box.x} y={box.y} z={box.z} />;
+            })}
+            <Plane setBox={setBox} activate={activate} />
+            <Flor setBox={setBox} activate={activate} />
+          </Physics>
+          <ambientLight intensity={0.5} />
+          <Stars radius={200} />
+        </Canvas>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <ControlsBox
+            boxes={boxes}
+            setBoxes={setBoxes}
+            box={box}
+            setBox={setBox}
+            activate={activate}
+            setActivate={setActivate}
           />
+          <div id="controlNewBoxes">
+            <span>Pause Physics</span>
+            <input
+              type="checkbox"
+              value={physics}
+              onChange={() => setPhysics(!physics)}
+            />
+          </div>
         </div>
-      </div>
+      </Suspense>
     </>
   );
 }
