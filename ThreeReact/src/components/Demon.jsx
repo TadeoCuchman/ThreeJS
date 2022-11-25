@@ -6,17 +6,35 @@ source: https://sketchfab.com/3d-models/batdr-beast-bendy-217351cde3864dd7870c54
 title: BATDR Beast Bendy
 */
 
-import React, { useRef } from 'react'
+import React from 'react'
 import { useGLTF } from '@react-three/drei'
 
 export default function Model(props) {
   const { nodes, materials } = useGLTF('/demon.gltf')
   return (
-    <group scale={0.1} {...props}  dispose={null}>
-          <primitive object={nodes.GLTF_created_0_rootJoint} />
-          <skinnedMesh geometry={nodes.Object_7.geometry} material={materials.Skin_1} skeleton={nodes.Object_7.skeleton} />
+    <>
+    <group scale={0.13} {...props} dispose={null}>
+      <primitive object={nodes.GLTF_created_0_rootJoint} />
+      <skinnedMesh
+        geometry={nodes.Object_7.geometry}
+        material={materials.Skin_1}
+        skeleton={nodes.Object_7.skeleton}
+      />
     </group>
-  )
+    <Shadow/>
+    </>
+  );
 }
+
+const Shadow = () => {
+  return (
+    <group>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-1, 1, 3]}>
+        <circleBufferGeometry blur={0.2} attach="geometry" args={[3, 4]} />
+        <meshLambertMaterial attach="material" color={"black"} />
+      </mesh>
+    </group>
+  );
+};
 
 useGLTF.preload('/demon.gltf')

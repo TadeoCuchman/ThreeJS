@@ -1,3 +1,12 @@
+body{
+  background-color: black;
+}
+
+@font-face{
+ font-family: 'BloodscriptitalicpersonalusN';
+  src: url('/blood-script-italic-personal-us-font/BloodscriptitalicpersonalusN-L3v23.otf') format('truetype');
+}
+
 canvas{
   width: 100%;
   height: 80vh;
@@ -7,19 +16,31 @@ canvas{
 #controlNewBoxes{
   display:flex;
   flex-direction: column;
+  align-items: center;
   width: 20%;
-  border: 1px solid black;
+  border: 3px solid rgba(0, 0, 0, 0.495);
   padding: 10px;
   border-radius: 5px;
   margin-top: 5px;
+  background-color: rgb(77, 77, 77)
 }
+
+#controlNewBoxes input{
+  border: none;
+  border-radius: 5px;
+}
+
+
 
 h1{
   position: absolute;
-  top: 10px;
+  top: 20px;
   padding:0;
   margin:0;
-  right: 30%;
+  right: 33%;
   color: rgba(255, 0, 0, 0.564);
   z-index: 10;
+  font-family: 'BloodscriptitalicpersonalusN';
+  font-size: 50px;
+
 }

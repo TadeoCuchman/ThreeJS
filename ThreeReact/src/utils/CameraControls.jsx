@@ -28,6 +28,7 @@ export const CameraControls = () => {
       minAzimuthAngle={Infinity}
       maxDistance={200}
       minDistance={2}
+      zoomSpeed={0.2}
       
     />
   );
